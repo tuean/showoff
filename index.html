@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用 pi 与 dsh 造出来的东西 · 本机作品档案</title>
+<style>
+  :root{
+    --bg:#0a0b0f;
+    --bg2:#0e1016;
+    --ink:#ece9e2;
+    --muted:#a2a2ac;
+    --dim:#71737e;
+    --line:rgba(255,255,255,.09);
+    --line2:rgba(255,255,255,.16);
+    --mint:#7ee2a8;
+    --blue:#8ab4ff;
+    --amber:#f0b429;
+    --violet:#c3a6ff;
+    --pink:#ff9ec4;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+    --serif:"Songti SC","Noto Serif SC",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(900px 500px at 12% -8%, rgba(126,226,168,.10), transparent 60%),
+      radial-gradient(800px 480px at 92% 4%, rgba(138,180,255,.10), transparent 60%),
+      radial-gradient(700px 600px at 50% 110%, rgba(195,166,255,.07), transparent 60%);
+    background-attachment:fixed;
+  }
+  ::selection{background:rgba(126,226,168,.28)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:96px;padding-bottom:56px;position:relative}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;margin-bottom:34px;
+  }
+  .eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint);display:block}
+  h1{
+    font-family:var(--serif);font-weight:600;font-size:clamp(44px,7.4vw,88px);
+    line-height:1.06;letter-spacing:-.02em;margin:0 0 24px;
+  }
+  h1 em{
+    font-style:normal;font-family:var(--mono);font-size:.62em;letter-spacing:-.04em;
+    color:var(--mint);position:relative;top:-.06em;
+  }
+  h1 em + br + span{}
+  .lede{max-width:620px;color:var(--muted);font-size:17px;line-height:1.85;margin:0}
+  .lede b{color:var(--ink);font-weight:500}
+
+  .stats{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:64px;
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--line);
+  }
+  .stat{background:var(--bg2);padding:22px 20px}
+  .stat .n{font-family:var(--mono);font-size:30px;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+  .stat .n small{font-size:13px;color:var(--dim);margin-left:3px;letter-spacing:0}
+  .stat .k{font-size:12px;color:var(--dim);margin-top:7px;letter-spacing:.06em}
+
+  /* ---------- filter ---------- */
+  .filters{
+    position:sticky;top:0;z-index:20;margin-top:64px;padding:14px 0;
+    background:linear-gradient(180deg,rgba(10,11,15,.94),rgba(10,11,15,.72));
+    backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  }
+  .filters .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .chip{
+    appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);
+    font-family:var(--sans);font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer;
+    transition:.18s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .chip:hover{color:var(--ink);border-color:var(--line2)}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#0a0b0f;border-color:var(--ink)}
+  .chip span{font-family:var(--mono);font-size:11px;opacity:.6}
+
+  /* ---------- sections ---------- */
+  section{padding:78px 0 8px;scroll-margin-top:80px}
+  .sec-head{display:flex;align-items:flex-end;gap:18px;margin-bottom:30px;flex-wrap:wrap}
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.14em;padding-bottom:10px}
+  .sec-title{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.01em;margin:0;line-height:1.2}
+  .sec-sub{color:var(--dim);font-size:13px;margin-left:auto;padding-bottom:8px;font-family:var(--mono);letter-spacing:.04em}
+  .rule{height:1px;background:linear-gradient(90deg,var(--line),transparent);margin-bottom:30px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{
+    position:relative;border:1px solid var(--line);border-radius:18px;padding:24px;
+    background:linear-gradient(180deg,rgba(255,255,255,.028),rgba(255,255,255,.012));
+    transition:border-color .25s ease,transform .25s ease,background .25s ease;overflow:hidden;
+  }
+  .card::after{
+    content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;opacity:0;
+    background:radial-gradient(420px 200px at 15% 0%,var(--glow,rgba(126,226,168,.10)),transparent 70%);
+    transition:opacity .3s ease;
+  }
+  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .card:hover::after{opacity:1}
+  .card[data-cat="desktop"]{--glow:rgba(126,226,168,.10)}
+  .card[data-cat="service"]{--glow:rgba(138,180,255,.10)}
+  .card[data-cat="device"]{--glow:rgba(240,180,41,.09)}
+
+  .repo{
+    position:absolute;top:18px;right:18px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+    background:rgba(255,255,255,.03);transition:.18s ease;z-index:2;
+  }
+  .repo:hover{color:var(--ink);border-color:var(--line2);background:rgba(255,255,255,.07)}
+  .has-repo .card-top{padding-right:92px}
+  .card--wide{grid-column:span 2;display:grid;grid-template-columns:1.02fr .98fr;gap:30px;align-items:center}
+  .card--wide .body{padding:6px 0}
+
+  .card-top{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+  .mark{
+    width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;
+    font-family:var(--mono);font-size:15px;font-weight:600;color:#0a0b0f;
+    background:linear-gradient(145deg,var(--mint),#4fc98a);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 18px rgba(0,0,0,.35);
+  }
+  .mark.blue{background:linear-gradient(145deg,#a9c6ff,#6f9bff)}
+  .mark.amber{background:linear-gradient(145deg,#ffd27a,#e5a41c)}
+  .mark.violet{background:linear-gradient(145deg,#d7c2ff,#a98bff)}
+  .mark.pink{background:linear-gradient(145deg,#ffc0d7,#ff8bb4)}
+  .appicon{width:42px;height:42px;border-radius:11px;flex:none;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.08)}
+  .card h3{font-size:19px;margin:0;font-weight:600;letter-spacing:-.01em}
+  .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+  .tagline{font-size:14.5px;color:var(--mint);margin:0 0 10px;line-height:1.6}
+  .card[data-cat="service"] .tagline{color:var(--blue)}
+  .card[data-cat="device"] .tagline{color:var(--amber)}
+  .card p.desc{color:var(--muted);font-size:13.8px;line-height:1.78;margin:0 0 18px}
+  .card p.desc b{color:var(--ink);font-weight:500}
+
+  .facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 14px;padding:13px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .fact{font-family:var(--mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .fact::before{content:"·";color:var(--dim);margin-right:8px}
+  .fact:first-child::before{display:none}
+
+  .meta{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--dim);line-height:1.6}
+  .meta .dotline{width:5px;height:5px;border-radius:50%;background:var(--mint);margin-top:7px;flex:none;opacity:.8}
+  .card[data-cat="service"] .meta .dotline{background:var(--blue)}
+  .card[data-cat="device"] .meta .dotline{background:var(--amber)}
+  .meta a{color:var(--muted);border-bottom:1px dotted var(--line2)}
+  .meta a:hover{color:var(--ink)}
+
+  .shot{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .shot img{display:block;width:100%;height:auto}
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .thumbs img{width:100%;height:74px;object-fit:cover;object-position:top;border-radius:8px;border:1px solid var(--line);display:block}
+
+  /* ---------- toolchain ---------- */
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .tool{background:var(--bg2);padding:20px 22px;display:flex;gap:14px;align-items:flex-start}
+  .tool .idx{font-family:var(--mono);font-size:11px;color:var(--violet);padding-top:4px;letter-spacing:.05em}
+  .tool h4{margin:0 0 5px;font-size:14.5px;font-weight:600}
+  .tool p{margin:0;font-size:12.8px;color:var(--muted);line-height:1.7}
+  .tool code{font-family:var(--mono);font-size:11.5px;color:var(--violet);background:rgba(195,166,255,.08);padding:1px 5px;border-radius:4px}
+
+  .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+  .skill{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:rgba(255,255,255,.018)}
+  .skill b{display:block;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--violet);margin-bottom:5px;word-break:break-all}
+  .skill span{font-size:12.2px;color:var(--muted);line-height:1.6;display:block}
+
+  /* ---------- pipeline ---------- */
+  .pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:26px 0 40px}
+  .step{position:relative;border:1px solid var(--line);border-radius:14px;padding:16px 15px;background:rgba(255,255,255,.02)}
+  .step::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--dim);font-family:var(--mono);font-size:12px}
+  .step:last-child::after{display:none}
+  .step .n{font-family:var(--mono);font-size:10px;color:var(--mint);letter-spacing:.16em}
+  .step h5{margin:6px 0 6px;font-size:14px;font-weight:600}
+  .step p{margin:0;font-size:12px;color:var(--dim);line-height:1.65}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .side{border:1px solid var(--line);border-radius:16px;padding:22px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+  .side h4{margin:0 0 4px;font-size:16px;font-family:var(--mono);letter-spacing:-.02em}
+  .side .role{font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);margin-bottom:14px}
+  .side ul{margin:0;padding-left:16px;color:var(--muted);font-size:13.2px;line-height:1.9}
+  .side li::marker{color:var(--mint)}
+  .side.b li::marker{color:var(--blue)}
+  .side .count{margin-top:16px;font-family:var(--mono);font-size:11.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+
+  /* ---------- notes ---------- */
+  .notes{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:8px}
+  .note{padding:15px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:132px 1fr;gap:16px}
+  .note dt{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.05em;padding-top:2px}
+  .note dd{margin:0;font-size:12.8px;color:var(--muted);line-height:1.7}
+  .note dd code{font-family:var(--mono);font-size:11.5px;color:var(--ink);background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px}
+
+  footer{margin-top:80px;padding:36px 0 60px;border-top:1px solid var(--line);color:var(--dim);font-size:12px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  footer .egg{font-family:var(--mono);font-size:11px}
+
+  .hidden{display:none!important}
+
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stats .stat:last-child{grid-column:span 2}
+    .grid,.tools,.pipe,.split,.notes{grid-template-columns:1fr}
+    .card--wide{grid-column:span 1;grid-template-columns:1fr}
+    .skills{grid-template-columns:1fr 1fr}
+    .step::after{display:none}
+    .note{grid-template-columns:1fr;gap:4px}
+    .sec-sub{margin-left:0}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 18px}
+    .hero{padding-top:64px;padding-bottom:40px}
+    .skills{grid-template-columns:1fr}
+  }
+  @media print{
+    @page{size:A4;margin:14mm}
+    html,body{background:#fff !important;background-image:none !important;color:#141414}
+    .filters{display:none}
+    .hero{padding-top:0}
+    section{padding-top:26px;break-inside:auto}
+    .card,.side,.tool,.step,.stat,.skill{
+      background:#fff !important;border-color:#d8d8d8 !important;break-inside:avoid;
+      box-shadow:none !important;transform:none !important;
+    }
+    .card::after{display:none}
+    .stats{background:#d8d8d8 !important}
+    .tools{background:#d8d8d8 !important;border-color:#d8d8d8 !important}
+    .tagline,.card[data-cat="service"] .tagline{color:#0a6b3d !important}
+    .card[data-cat="device"] .tagline{color:#8a5a00 !important}
+    .kicker,.fact,.meta,.desc,.lede,.stat .k,.sec-sub,.sec-num,.note dt,.note dd,.skill span,.tool p,.step p{
+      color:#3a3a3a !important;
+    }
+    h1,.stat .n,.card h3,.sec-title{color:#111 !important}
+    h1 em{color:#0a6b3d !important}
+    .mark{box-shadow:none !important}
+    .shot{border-color:#d8d8d8 !important;box-shadow:none !important}
+    .meta .dotline{background:#0a6b3d !important}
+    .side .count,.note dd code,.tool code{color:#333 !important;background:#f1f1f1 !important}
+    a{color:#1b4fb8 !important}
+    b,strong{color:#0b0b0b !important}
+    footer{color:#666 !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <div class="eyebrow"><i></i>本机作品档案 · macOS · 2026</div>
+  <h1>用 <em>pi</em> 与 <em>dsh</em><br>造出来的东西</h1>
+  <p class="lede">
+    过去半年，我把需求用中文说给两个跑在本机的编程助手——<b>pi</b> 和 <b>dsh</b>——
+    由它们读仓库、改代码、跑测试、打包、装进 <b>/Applications</b>。
+    这里是我让它们造出来的 12 件软件与工具、一组 Agent 工具链，以及每件产物背后的构建轨迹。
+  </p>
+
+  <div class="stats">
+    <div class="stat"><div class="n">12</div><div class="k">件成品</div></div>
+    <div class="stat"><div class="n">15.5<small>万行</small></div><div class="k">Rust + JS/TS</div></div>
+    <div class="stat"><div class="n">258</div><div class="k">次构建会话</div></div>
+    <div class="stat"><div class="n">4</div><div class="k">已装进 /Applications</div></div>
+    <div class="stat"><div class="n">8</div><div class="k">GitHub 公开仓库</div></div>
+  </div>
+</header>
+
+<nav class="filters" aria-label="筛选">
+  <div class="wrap">
+    <button class="chip" data-filter="all" aria-pressed="true">全部 <span>12</span></button>
+    <button class="chip" data-filter="desktop" aria-pressed="false">桌面应用 <span>4</span></button>
+    <button class="chip" data-filter="service" aria-pressed="false">本地服务 <span>3</span></button>
+    <button class="chip" data-filter="device" aria-pressed="false">设备与系统 <span>5</span></button>
+    <a class="chip" href="#agent">Agent 工具链 <span>19</span></a>
+    <a class="chip" href="#how">构建方式</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============ 桌面应用 ============ -->
+  <section id="desktop">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">桌面应用</h2>
+      <span class="sec-sub">Rust · GPUI · 原生</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="grid">
+
+      <article class="card card--wide has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/treq" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="body">
+          <div class="card-top">
+            <div class="mark">tr</div>
+            <div><h3>treq</h3><div class="kicker">API Client · Rust + GPUI</div></div>
+          </div>
+          <p class="tagline">本地优先的接口调试客户端：界面像 Insomnia，数据是磁盘上一堆能进 Git 的 YAML。</p>
+          <p class="desc">
+            左边是空间 → 集合 → 分组（任意层级）→ 请求的树，中间编辑，右边看响应。
+            五种 Body、四种认证、JSON 高亮与折叠、状态码 / 耗时 / 大小、JSON 路径提示、cURL 导入与代码生成。
+            <b>285 个测试函数</b>和每次改动后的截图自检，是它敢连续重构的前提。
+          </p>
+          <div class="facts">
+            <span class="fact">33.3k 行 Rust</span>
+            <span class="fact">21 commits</span>
+            <span class="fact">已装 /Applications/treq.app</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 5 个会话（71 MB 记录）· README 自述「绝大部分代码由 Claude Code / pi 编写」</span></div>
+        </div>
+        <div class="shot"><img src="assets/treq-main.png" alt="treq 主界面：左侧请求树，中间 JSON 请求体，右侧响应"></div>
+      </article>
+
+      <article class="card has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/maildesk" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <img class="appicon" src="assets/maildesk-icon.png" alt="">
+          <div><h3>maildesk</h3><div class="kicker">Mail Client · Rust + GPUI</div></div>
+        </div>
+        <p class="tagline">原生 macOS 邮件客户端：没有 WebView，没有现成邮件库，IMAP/SMTP/MIME 全部手写。</p>
+        <p class="desc">
+          它只回答一个问题：一个邮件客户端能有多小。3.6 万封邮件实测 <b>94 MB 物理内存、空闲 0.3% CPU、5.4 MB 二进制</b>。
+          HTML 正文用真实文本排版渲染——标题、列表、表格、引用回复、内联图片，还能拖选复制。
+        </p>
+        <div class="facts">
+          <span class="fact">28.8k 行 Rust</span>
+          <span class="fact">51 commits · 10-02 → 10-16</span>
+          <span class="fact">已装 /Applications</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 9 个会话（含早期 <code>email-desktop</code> 目录）</span></div>
+      </article>
+
+      <article class="card has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/artifeeds" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <img class="appicon" src="assets/artifeeds-icon.png" alt="">
+          <div><h3>artifeeds</h3><div class="kicker">Feed Reader · Rust + GPUI</div></div>
+        </div>
+        <p class="tagline">为「上千个源、又快又省」写的桌面 RSS / Atom / JSON Feed 阅读器。</p>
+        <p class="desc">
+          单定时器调度、两级预算并发、条件请求（没更新就只花一个 304、零字节正文）、自适应轮询，每个队列都有硬上限。
+          三种浏览维度（按博客 / 标签 / 分类）全部虚拟化。
+          还能让本机 pi 把任意网页变成订阅：一个 OPML 落地 <b>102 个源 / 12 个分组</b>。
+        </p>
+        <div class="facts">
+          <span class="fact">18.0k 行 Rust</span>
+          <span class="fact">已装 /Applications</span>
+          <span class="fact">pi 集成</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 项目记忆 + dsh 2 个会话</span></div>
+      </article>
+
+      <article class="card" data-cat="desktop">
+        <div class="card-top">
+          <img class="appicon" src="assets/tva-icon.png" alt="">
+          <div><h3>TVA</h3><div class="kicker">Voice Agent · Rust + GPUI</div></div>
+        </div>
+        <p class="tagline">按住一个键说话，本机的 pi / dsh / opencli 替你动手。</p>
+        <p class="desc">
+          whisper.cpp 完全离线识别，<b>tiny 出实时预览、small 出终稿</b>（解码耗时 0.15s / 0.9s）。
+          一条指令拆成录音 → 识别 → 理解 → 思考 → 执行 → 完成六步，每步耗时都来自真实信号；
+          执行后端可一键切换 pi RPC / dsh headless / opencli / shell。
+        </p>
+        <div class="facts">
+          <span class="fact">5.0k 行 Rust</span>
+          <span class="fact">离线可用</span>
+          <span class="fact">dist/TVA.app</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>它是 pi / dsh 的前端而非产物：本机会话库里没有它的构建记录，按实际来源标注</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 本地服务 ============ -->
+  <section id="service">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">本地服务与内容</h2>
+      <span class="sec-sub">axum · SQLite · 单文件</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="grid">
+
+      <article class="card has-repo" data-cat="service">
+        <a class="repo" href="https://github.com/tuean/toval" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark blue">tv</div>
+          <div><h3>toval</h3><div class="kicker">Writing Universe · 38.3k 行</div></div>
+        </div>
+        <p class="tagline">个人创作宇宙工作台：故事、角色、事件、章节都长在一张图上。</p>
+        <p class="desc">
+          <b>universe → entity / era / event / story → chapter</b> 的 SQLite 图模型；AI 对话产出提案，落库前留修订快照；
+          服务端渲染 + HTMX，静态样式提前构建，运行期不需要 Node；一个二进制，只监听 127.0.0.1。
+        </p>
+        <div class="facts">
+          <span class="fact">38.3k 行 Rust</span>
+          <span class="fact">单文件二进制</span>
+          <span class="fact">DeepSeek 生成</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh <b>20 个会话</b>——本机最密集的一个项目</span></div>
+      </article>
+
+      <article class="card" data-cat="service">
+        <div class="card-top">
+          <div class="mark blue">tb</div>
+          <div><h3>tblogs</h3><div class="kicker">Blog System · 两段式</div></div>
+        </div>
+        <p class="tagline">拆成两半的博客系统：本地写作，服务器只读。</p>
+        <p class="desc">
+          <code>tblogs-admin</code> 读本地 Markdown → 生成内容包与部署文件 → 发布；
+          <code>tblogs-server</code> 只提供 HTTP，<b>没有任何写作入口</b>，被攻破也改不了文章。
+          axum + SQLite + askama + pulldown-cmark，无前端构建、无 CDN。
+        </p>
+        <div class="facts">
+          <span class="fact">7.7k 行 Rust</span>
+          <span class="fact">10 commits</span>
+          <span class="fact">systemd + Caddy/nginx</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 3 个会话 · deploy/ 含 cloudflared 与 DDNS 定时器</span></div>
+      </article>
+
+      <article class="card card--wide" data-cat="service">
+        <div class="body">
+          <div class="card-top">
+            <div class="mark blue">gr</div>
+            <div><h3>gov-reports</h3><div class="kicker">Corpus + RAG · 27 年</div></div>
+          </div>
+          <p class="tagline">27 年《政府工作报告》全文语料库，外加一层检索。</p>
+          <p class="desc">
+            2000–2026 无缺年，<b>27 份 Markdown、约 50.4 万字</b>，每年一份元信息表 + 正文；保留原始 HTML 快照以便离线复核。
+            中央站点改版后缺失的 6 年，用省级政府官方转载补齐并逐条标注来源。<code>rag/</code> 里是建库、嵌入、检索三件套。
+          </p>
+          <div class="facts">
+            <span class="fact">27 份</span>
+            <span class="fact">50.4 万字</span>
+            <span class="fact">原始 HTML 快照</span>
+            <span class="fact">可重跑</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 3 个会话 · 抓取脚本 fetch_reports.py + 三级兜底来源</span></div>
+        </div>
+        <div class="shot" style="background:#0b0d12;display:grid;place-items:center;min-height:210px">
+          <div style="font-family:var(--mono);text-align:center;padding:28px">
+            <div style="font-size:46px;letter-spacing:-.04em;color:var(--blue)">27<span style="font-size:16px;color:var(--dim)"> 份</span></div>
+            <div style="font-size:11px;color:var(--dim);letter-spacing:.2em;margin-top:8px">2000 — 2026</div>
+            <div style="margin-top:18px;font-size:11px;color:var(--muted);letter-spacing:.08em">md/ · raw/ · index.csv · rag/</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 设备与系统 ============ -->
+  <section id="device">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">设备与系统小工具</h2>
+      <span class="sec-sub">贴着 macOS / 浏览器 / uTools 的边角</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="grid">
+
+      <article class="card card--wide has-repo" data-cat="device">
+        <a class="repo" href="https://github.com/tuean/RaptorQR" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="body">
+          <div class="card-top">
+            <div class="mark amber">RQ</div>
+            <div><h3>RaptorQR · Host</h3><div class="kicker">Screen QR Transfer · Rust</div></div>
+          </div>
+          <p class="tagline">用屏幕上的动画二维码，在没网、没共享剪贴板的两台机器之间搬文本和文件。</p>
+          <p class="desc">
+            上游是浏览器发、摄像头收；这个 fork 新增 <b>host/</b>：不起摄像头，直接扫屏幕一块区域——
+            专治「隔离虚拟机 ↔ 宿主机」。macOS 是 gpui 窗口版（实时预览、拖框选、多显示器、系统通知），
+            Windows 是无界面控制台版。<b>收到的文本不落盘，直接进剪贴板</b>；文件写 ~/Downloads。
+          </p>
+          <div class="facts">
+            <span class="fact">host 16.8k 行 Rust</span>
+            <span class="fact">93 commits</span>
+            <span class="fact">universal 二进制</span>
+            <span class="fact">已装 /Applications</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 3 + dsh 2 个会话 · GitHub Actions 出 Windows 构建</span></div>
+        </div>
+        <div class="shot" style="background:#0b0d12;display:grid;place-items:center;min-height:250px">
+          <div style="font-family:var(--mono);text-align:center;padding:24px;color:var(--muted);font-size:12px;line-height:2">
+            <div style="font-size:11px;letter-spacing:.22em;color:var(--amber)">RAPTORQ FOUNTAIN CODE</div>
+            <img src="assets/qr.svg" width="150" height="150" alt="" style="margin:16px auto 0;display:block;filter:drop-shadow(0 10px 26px rgba(0,0,0,.55))">
+            <div style="margin-top:16px">屏幕区域 → 捕获 → 扫描 → 解码 → 交付</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card card--wide has-repo" data-cat="device">
+        <a class="repo" href="https://github.com/tuean/tbas" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="body">
+          <div class="card-top">
+            <div class="mark amber">tb</div>
+            <div><h3>TBAS</h3><div class="kicker">Tab Baseline Archive · Node + Edge 扩展</div></div>
+          </div>
+          <p class="tagline">把 Edge 里越开越多的分组标签页，存成可检索、可选择性恢复、可安全关闭的快照。</p>
+          <p class="desc">
+            记录窗口、分组、颜色、折叠状态、固定页、顺序和当前标签，按「办公 / 个人」归档；保存并关闭可释放几百 MB 内存；
+            还能导出离线 HTML 报告。保存时去重、识别 utm 跟踪参数。自带 4 套单测 + 端到端。
+          </p>
+          <div class="facts">
+            <span class="fact">5.3k 行 JS</span>
+            <span class="fact">CLI + 扩展</span>
+            <span class="fact">4 套测试 + e2e</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 1 个会话 · 截图即 docs/ 下三张实拍</span></div>
+        </div>
+        <div>
+          <div class="shot"><img src="assets/tbas-dashboard.png" alt="TBAS 快照面板"></div>
+          <div class="thumbs">
+            <img src="assets/tbas-picker.png" alt="选择要保存的标签">
+            <img src="assets/tbas-report.png" alt="导出的离线 HTML 报告">
+            <img src="assets/tbas-dashboard.png" alt="快照列表">
+          </div>
+        </div>
+      </article>
+
+      <article class="card has-repo" data-cat="device">
+        <a class="repo" href="https://github.com/tuean/utools-fd-search" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark amber">fd</div>
+          <div><h3>utools-fd-search</h3><div class="kicker">uTools Plugin · fd + rg + fzf</div></div>
+        </div>
+        <p class="tagline">文件名和文件内容一起搜：三个命令行工具拼成一个 uTools 插件。</p>
+        <p class="desc">
+          字面量 / glob / 模糊三种模式；类型、时间过滤；结果流式渲染，↑↓ 选、Enter 打开、⌘Enter 定位。
+          可选接本机 pi / dsh，把「上周改过的资产配置表格」解析成查询条件。
+        </p>
+        <div class="facts">
+          <span class="fact">1.5k 行 JS/HTML</span>
+          <span class="fact">38 KB .upxs</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 4 个会话 · 三个依赖都可降级</span></div>
+      </article>
+
+      <article class="card has-repo" data-cat="device">
+        <a class="repo" href="https://github.com/tuean/utools-selfie" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark amber">cm</div>
+          <div><h3>utools-selfie</h3><div class="kicker">uTools Plugin · Camera</div></div>
+        </div>
+        <p class="tagline">在 uTools 里录摄像头：用一个脚本 app 把 ffmpeg 变成独立的 TCC 实体。</p>
+        <p class="desc">
+          uTools 有硬化运行时却缺相机权限，getUserMedia 拿不到帧、子进程也被 TCC 拒绝。
+          解法是 CamHelper.app 经 LaunchServices 启动：预览进程常驻、录制进程按需，分段 MP4 可安全强杀。
+        </p>
+        <div class="facts">
+          <span class="fact">9 KB .upxs</span>
+          <span class="fact">预览 + 录制双进程</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 1 个会话（约 1 MB 记录）</span></div>
+      </article>
+
+      <article class="card" data-cat="device">
+        <div class="card-top">
+          <div class="mark amber">p2</div>
+          <div><h3>pdf2str</h3><div class="kicker">CLI · 58 行</div></div>
+        </div>
+        <p class="tagline">把 PDF 转成纯文本的一行命令，扫描件走 OCR。</p>
+        <p class="desc">
+          基于 liteparse：<code>--ocr</code>、<code>--pages 1-5,10</code>、<code>--lang chi_sim+eng</code>。
+          小到只有 58 行，是「让 agent 顺手写个工具」的最小样本。
+        </p>
+        <div class="facts">
+          <span class="fact">58 行 Rust</span>
+          <span class="fact">liteparse</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：RustroverProjects/pdf2str</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ Agent 工具链 ============ -->
+  <section id="agent">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">Agent 工具链</h2>
+      <span class="sec-sub">给人和给 agent 用的那部分</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="tools">
+      <div class="tool"><span class="idx">01</span><div><h4>dsh-remote / win-task</h4><p>跨机派单：任务走 ssh 的 stdin，远端 Windows 上的 dsh headless 执行，中文、引号、换行都不被 shell 转义破坏。</p></div></div>
+      <div class="tool"><span class="idx">02</span><div><h4>ui-unwedge / ui-wakeguard</h4><p>macOS 窗口服务器失步（Dock 卡住、空间切不动）的诊断与逐级复位；唤醒探测用 <code>sysctl kern.waketime</code>，只有新唤醒才做重诊断。</p></div></div>
+      <div class="tool"><span class="idx">03</span><div><h4>dlp-toggle</h4><p>终端管控（联软 / 微步）的临时开关：用 <code>bootout</code> 只卸载当前会话，重启自动恢复。</p></div></div>
+      <div class="tool"><span class="idx">04</span><div><h4>wb-otel-env</h4><p>从登录快照读账号，注入 WorkBuddy 的 OTel 上报环境变量，由 LaunchAgent 开机执行。</p></div></div>
+      <div class="tool"><span class="idx">05</span><div><h4>deepseek-balance.ts</h4><p>pi 扩展：会话启动即拉余额，之后每 5 分钟刷新到状态栏——把「还剩多少钱」变成常驻信息。</p></div></div>
+      <div class="tool"><span class="idx">06</span><div><h4>13 个自建 skill</h4><p>把重复的流程固化成可被 agent 调用的说明书：Jira 三件套、ISMP 审计、会议室预约、macOS 三件套、成本审计……</p></div></div>
+    </div>
+
+    <div class="skills">
+      <div class="skill"><b>dashi-ppt</b><span>按预置视觉主题生成可离线打开、可在浏览器编辑的 HTML 演示，导出 PPTX / PDF</span></div>
+      <div class="skill"><b>jira-issue-chain-create</b><span>按模板在 jira.gjzq.cn 建「需求→评审→特性→故事→子任务」五层单链</span></div>
+      <div class="skill"><b>jira-cmmi-daily-check</b><span>读 CMMI 不符合项清单，按规则逐条改单并回读验证</span></div>
+      <div class="skill"><b>jira-version-create</b><span>按日期生成 ISMP 的「故事 / 特性」两个发布版本</span></div>
+      <div class="skill"><b>ismp-account-role-export</b><span>把 ISMP 导出的角色-菜单表加工成域账户审计清单</span></div>
+      <div class="skill"><b>eboss-meeting-room-book</b><span>查空闲会议室并预约 / 改约，用 opencli 驱动 Edge</span></div>
+      <div class="skill"><b>broker-chat-compliance-check</b><span>用本地 DeepSeek 对券商坐席聊天记录做合规质检</span></div>
+      <div class="skill"><b>macos-windowserver-wedge-triage</b><span>UI 卡死的分诊与恢复流程</span></div>
+      <div class="skill"><b>macos-modern-cli-shell-setup</b><span>装齐现代 CLI 替代品并配好 zsh alias 与全局 AGENTS.md</span></div>
+      <div class="skill"><b>mem-skill-macos</b><span>「系统数据」膨胀的定位与安全清理，按可回收量分级</span></div>
+      <div class="skill"><b>pi-llm-cost-audit</b><span>从 session jsonl 聚合每日 / 每会话 token 与花费</span></div>
+      <div class="skill"><b>split-large-excel-to-zip</b><span>大 Excel（含加密）按固定行数拆分并打包</span></div>
+      <div class="skill"><b>iterm2-cmdv-image-paste</b><span>让 ⌘V 在 TUI 里既能粘文本又能贴图，只改按键映射</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 构建方式 ============ -->
+  <section id="how">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title">它们是怎么被造出来的</h2>
+      <span class="sec-sub">说需求 → 验收，而不是写代码</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="pipe">
+      <div class="step"><div class="n">01</div><h5>说需求</h5><p>一句话、一段抱怨、一张截图，不写规格</p></div>
+      <div class="step"><div class="n">02</div><h5>读仓库</h5><p>agent 先读 README、测试与现有代码，形成约束</p></div>
+      <div class="step"><div class="n">03</div><h5>小步改</h5><p>一次一件事，跑测试、跑截图自检</p></div>
+      <div class="step"><div class="n">04</div><h5>装上去</h5><p>bundle → /Applications，真实用一轮</p></div>
+      <div class="step"><div class="n">05</div><h5>回写文档</h5><p>把取舍写进 README / AGENTS.md，下次继承</p></div>
+    </div>
+
+    <div class="split">
+      <div class="side">
+        <h4>pi</h4>
+        <div class="role">Terminal Agent</div>
+        <ul>
+          <li>常驻终端，<code>--mode rpc</code> 可被别的程序调用（TVA 就是这么接的）</li>
+          <li>项目记忆 + 全局 AGENTS.md，跨会话继承约束</li>
+          <li>扩展生态：余额、终端联动</li>
+          <li>偏向「在一个仓库里长时间磨一个东西」</li>
+        </ul>
+        <div class="count">190 个会话 · 592 MB 记录</div>
+      </div>
+      <div class="side b">
+        <h4>dsh</h4>
+        <div class="role">Desktop + Web Agent</div>
+        <ul>
+          <li>桌面 / Web / headless 多形态，可远程 SSH 部署</li>
+          <li>任务板、子代理、技能、插件市场</li>
+          <li>长任务与多项目并行，会话可按工作区分组</li>
+          <li>偏向「把一整套流程跑完」</li>
+        </ul>
+        <div class="count">68 个会话 · 109 MB 记录</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 口径 ============ -->
+  <section id="notes">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">口径与证据</h2>
+      <span class="sec-sub">哪些是数出来的，哪些是推出来的</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="notes">
+      <dl class="note"><dt>代码行数</dt><dd><code>src/</code> 与 <code>crates/</code> 下 <code>.rs</code> 的行数合计，不含 <code>target/</code> 与依赖；JS/TS 同理。共 154,694 行。</dd></dl>
+      <dl class="note"><dt>会话数</dt><dd>pi：<code>~/.pi/agent/sessions/&lt;工作区&gt;/*.jsonl</code> 共 190 个；dsh：<code>~/.dsh/sessions/&lt;工作区&gt;/</code> 共 68 个，合计 258。目录名即当时的工作目录。</dd></dl>
+      <dl class="note"><dt>装机</dt><dd>以 <code>/Applications</code> 下实际存在为准：treq、maildesk、artifeeds、RaptorQR Receiver。</dd></dl>
+      <dl class="note"><dt>公开仓库</dt><dd>以 <code>git remote</code> 指向 <code>github.com/tuean</code> 为准：treq、maildesk、RaptorQR、utools-fd-search、toval、artifeeds、tbas、utools-selfie。</dd></dl>
+      <dl class="note"><dt>归属</dt><dd>会话目录只能说明「在那个项目里工作过」，不等于逐行归属。treq 的 README 有作者自述作为直接证据，其余按会话密度与提交节奏推断。</dd></dl>
+      <dl class="note"><dt>例外</dt><dd>TVA 驱动 pi / dsh，但本机会话库里没有它的构建记录，因此单独标注，不算作 pi/dsh 产物。</dd></dl>
+      <dl class="note"><dt>时间</dt><dd>提交时间与文件时间取自 git / 文件系统；最早的 RaptorQR 提交在 2026-05，最近的在 2026-10-16。</dd></dl>
+      <dl class="note"><dt>截图</dt><dd>全部来自各仓库 <code>docs/</code>，非本次补拍；treq、TBAS 为运行实拍。</dd></dl>
+    </div>
+  </section>
+
+  <footer>
+    <div>本页由 dsh 生成 · 2026-10 · 数据来自本机会话库与各仓库</div>
+    <div class="egg">彩蛋：dsh 桌面宠物「D老师」· 亲密度 484 · 396 轮</div>
+  </footer>
+
+</main>
+
+<script>
+  const cards = [...document.querySelectorAll('.card')];
+  const chips = [...document.querySelectorAll('.chip[data-filter]')];
+
+  function apply(filter){
+    let shown = 0;
+    cards.forEach(c => {
+      const match = filter === 'all' || c.dataset.cat === filter;
+      c.classList.toggle('hidden', !match);
+      if (match) shown++;
+    });
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
+    document.querySelectorAll('section').forEach(s => {
+      const any = [...s.querySelectorAll('.card')].some(c => !c.classList.contains('hidden'));
+      if (s.querySelector('.card')) s.classList.toggle('hidden', !any);
+    });
+  }
+
+  chips.forEach(chip => chip.addEventListener('click', () => apply(chip.dataset.filter)));
+
+  // 轻量入场：支持时淡入，不支持或打印时直接显示
+  const calm = !matchMedia('(prefers-reduced-motion: reduce)').matches && !matchMedia('print').matches;
+  if ('IntersectionObserver' in window && calm){
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          e.target.animate(
+            [{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'none'}],
+            {duration:420, easing:'cubic-bezier(.2,.7,.2,1)', fill:'both'}
+          );
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:.08});
+    document.querySelectorAll('.card, .step, .tool, .skill').forEach(el => io.observe(el));
+  }
+</script>
+</body>
+</html>
