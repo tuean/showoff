@@ -105,6 +105,7 @@
   .card:hover::after{opacity:1}
   .card[data-cat="desktop"]{--glow:rgba(126,226,168,.10)}
   .card[data-cat="service"]{--glow:rgba(138,180,255,.10)}
+  .card[data-cat="library"]{--glow:rgba(195,166,255,.11)}
   .card[data-cat="device"]{--glow:rgba(240,180,41,.09)}
 
   .repo{
@@ -133,6 +134,7 @@
   .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px}
   .tagline{font-size:14.5px;color:var(--mint);margin:0 0 10px;line-height:1.6}
   .card[data-cat="service"] .tagline{color:var(--blue)}
+  .card[data-cat="library"] .tagline{color:var(--violet)}
   .card[data-cat="device"] .tagline{color:var(--amber)}
   .card p.desc{color:var(--muted);font-size:13.8px;line-height:1.78;margin:0 0 18px}
   .card p.desc b{color:var(--ink);font-weight:500}
@@ -145,6 +147,7 @@
   .meta{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--dim);line-height:1.6}
   .meta .dotline{width:5px;height:5px;border-radius:50%;background:var(--mint);margin-top:7px;flex:none;opacity:.8}
   .card[data-cat="service"] .meta .dotline{background:var(--blue)}
+  .card[data-cat="library"] .meta .dotline{background:var(--violet)}
   .card[data-cat="device"] .meta .dotline{background:var(--amber)}
   .meta a{color:var(--muted);border-bottom:1px dotted var(--line2)}
   .meta a:hover{color:var(--ink)}
@@ -226,6 +229,9 @@
     .stats{background:#d8d8d8 !important}
     .tools{background:#d8d8d8 !important;border-color:#d8d8d8 !important}
     .tagline,.card[data-cat="service"] .tagline{color:#0a6b3d !important}
+    .card[data-cat="library"] .tagline{color:#4a2f8f !important}
+    .card[data-cat="library"] .shot{background:#f8f6fd !important;border-color:#d8d8d8 !important}
+    .card[data-cat="library"] .shot i{background:#6b4fc4 !important}
     .card[data-cat="device"] .tagline{color:#8a5a00 !important}
     .kicker,.fact,.meta,.desc,.lede,.stat .k,.sec-sub,.sec-num,.note dt,.note dd,.skill span,.tool p,.step p{
       color:#3a3a3a !important;
@@ -235,6 +241,7 @@
     .mark{box-shadow:none !important}
     .shot{border-color:#d8d8d8 !important;box-shadow:none !important}
     .meta .dotline{background:#0a6b3d !important}
+    .card[data-cat="library"] .meta .dotline{background:#4a2f8f !important}
     .side .count,.note dd code,.tool code{color:#333 !important;background:#f1f1f1 !important}
     a{color:#1b4fb8 !important}
     b,strong{color:#0b0b0b !important}
@@ -250,12 +257,12 @@
   <p class="lede">
     过去半年，我把需求用中文说给两个跑在本机的编程助手——<b>pi</b> 和 <b>dsh</b>——
     由它们读仓库、改代码、跑测试、打包、装进 <b>/Applications</b>。
-    这里是我让它们造出来的 12 件软件与工具、一组 Agent 工具链，以及每件产物背后的构建轨迹。
+    这里是我让它们造出来的 13 件软件与工具、一组 Agent 工具链，以及每件产物背后的构建轨迹。
   </p>
 
   <div class="stats">
-    <div class="stat"><div class="n">12</div><div class="k">件成品</div></div>
-    <div class="stat"><div class="n">15.5<small>万行</small></div><div class="k">Rust + JS/TS</div></div>
+    <div class="stat"><div class="n">13</div><div class="k">件成品</div></div>
+    <div class="stat"><div class="n">16.0<small>万行</small></div><div class="k">Rust + JS/TS + Java</div></div>
     <div class="stat"><div class="n">258</div><div class="k">次构建会话</div></div>
     <div class="stat"><div class="n">4</div><div class="k">已装进 /Applications</div></div>
     <div class="stat"><div class="n">8</div><div class="k">GitHub 公开仓库</div></div>
@@ -264,9 +271,10 @@
 
 <nav class="filters" aria-label="筛选">
   <div class="wrap">
-    <button class="chip" data-filter="all" aria-pressed="true">全部 <span>12</span></button>
+    <button class="chip" data-filter="all" aria-pressed="true">全部 <span>13</span></button>
     <button class="chip" data-filter="desktop" aria-pressed="false">桌面应用 <span>4</span></button>
     <button class="chip" data-filter="service" aria-pressed="false">本地服务 <span>3</span></button>
+    <button class="chip" data-filter="library" aria-pressed="false">库与开源 <span>1</span></button>
     <button class="chip" data-filter="device" aria-pressed="false">设备与系统 <span>5</span></button>
     <a class="chip" href="#agent">Agent 工具链 <span>19</span></a>
     <a class="chip" href="#how">构建方式</a>
@@ -450,10 +458,79 @@
     </div>
   </section>
 
+  <!-- ============ 库与开源 ============ -->
+  <section id="library">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">库与开源</h2>
+      <span class="sec-sub">Java 8+ · 零依赖 · 合规优先</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="grid">
+
+      <article class="card card--wide" data-cat="library">
+        <div class="body">
+          <div class="card-top">
+            <div class="mark violet">dj</div>
+            <div><h3>DingJson</h3><div class="kicker">JSON Library · Java 8+ · 零依赖</div></div>
+          </div>
+          <p class="tagline">一个不受 autoType 牵连、也敢拿去跑基准的 Java JSON 库：318 个合规用例全过，流式读数组比 fastjson2 还快。</p>
+          <p class="desc">
+            手写字符级解析器，<b>零运行时依赖</b>——没有第三方 jar，也没有传递 CVE。安全是默认值而不是选项：
+            深度上限 512（防嵌套 DoS）、HTML 转义（防 XSS）、字符串内裸控制字符按 RFC 8259 拒绝、NaN / Infinity 绝不输出非法字面量。
+            企业侧给齐 Jackson 同款 <code>DingJsonMapper</code>、<code>@JSONField</code> 注解、JSONPath，以及 <code>eval</code> / <code>isValid</code> / <code>deepCopy</code> 一行式 API；
+            <b>5,044 行单文件版</b>可以直接拖进任何老项目，不需要构建配置。
+          </p>
+          <div class="facts">
+            <span class="fact">5,083 行 Java</span>
+            <span class="fact">488 个测试 · 0 失败</span>
+            <span class="fact">JSONTestSuite 318/318</span>
+            <span class="fact">零依赖</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 4 个会话（4.6 MB 记录）· 未建 git 仓库，因此没有公开地址与提交数</span></div>
+        </div>
+        <div class="shot" style="background:#0b0d12;padding:26px 24px;display:flex;flex-direction:column;justify-content:center;min-height:270px">
+          <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--violet);margin-bottom:20px">100K INT ARRAY · 流式读取 ms/op</div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--violet)">DingJson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:9%;border-radius:4px;background:linear-gradient(90deg,#c3a6ff,#8f6bff)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums">0.73</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">fastjson2</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:16%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">1.32</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Jackson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:26%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">2.11</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Gson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:35%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">2.80</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">org.json</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">8.09</span>
+          </div>
+          <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.9">
+            零装箱 · 零中间树 · 比通用 parseArray 快 2.6x<br>
+            16 个主类 · 单文件版 5,044 行 · Apache 2.0
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
   <!-- ============ 设备与系统 ============ -->
   <section id="device">
     <div class="sec-head">
-      <span class="sec-num">03</span>
+      <span class="sec-num">04</span>
       <h2 class="sec-title">设备与系统小工具</h2>
       <span class="sec-sub">贴着 macOS / 浏览器 / uTools 的边角</span>
     </div>
@@ -579,7 +656,7 @@
   <!-- ============ Agent 工具链 ============ -->
   <section id="agent">
     <div class="sec-head">
-      <span class="sec-num">04</span>
+      <span class="sec-num">05</span>
       <h2 class="sec-title">Agent 工具链</h2>
       <span class="sec-sub">给人和给 agent 用的那部分</span>
     </div>
@@ -614,7 +691,7 @@
   <!-- ============ 构建方式 ============ -->
   <section id="how">
     <div class="sec-head">
-      <span class="sec-num">05</span>
+      <span class="sec-num">06</span>
       <h2 class="sec-title">它们是怎么被造出来的</h2>
       <span class="sec-sub">说需求 → 验收，而不是写代码</span>
     </div>
@@ -657,17 +734,17 @@
   <!-- ============ 口径 ============ -->
   <section id="notes">
     <div class="sec-head">
-      <span class="sec-num">06</span>
+      <span class="sec-num">07</span>
       <h2 class="sec-title">口径与证据</h2>
       <span class="sec-sub">哪些是数出来的，哪些是推出来的</span>
     </div>
     <div class="rule"></div>
 
     <div class="notes">
-      <dl class="note"><dt>代码行数</dt><dd><code>src/</code> 与 <code>crates/</code> 下 <code>.rs</code> 的行数合计，不含 <code>target/</code> 与依赖；JS/TS 同理。共 154,694 行。</dd></dl>
+      <dl class="note"><dt>代码行数</dt><dd><code>src/</code> 与 <code>crates/</code> 下 <code>.rs</code> 的行数合计，不含 <code>target/</code> 与依赖；JS/TS 同理。共 154,694 行。DingJson 按 <code>src/main</code> 下 <code>.java</code> 计 5,083 行（测试 5,959 行另计），合计 159,777 行。</dd></dl>
       <dl class="note"><dt>会话数</dt><dd>pi：<code>~/.pi/agent/sessions/&lt;工作区&gt;/*.jsonl</code> 共 190 个；dsh：<code>~/.dsh/sessions/&lt;工作区&gt;/</code> 共 68 个，合计 258。目录名即当时的工作目录。</dd></dl>
       <dl class="note"><dt>装机</dt><dd>以 <code>/Applications</code> 下实际存在为准：treq、maildesk、artifeeds、RaptorQR Receiver。</dd></dl>
-      <dl class="note"><dt>公开仓库</dt><dd>以 <code>git remote</code> 指向 <code>github.com/tuean</code> 为准：treq、maildesk、RaptorQR、utools-fd-search、toval、artifeeds、tbas、utools-selfie。</dd></dl>
+      <dl class="note"><dt>公开仓库</dt><dd>以 <code>git remote</code> 指向 <code>github.com/tuean</code> 为准：treq、maildesk、RaptorQR、utools-fd-search、toval、artifeeds、tbas、utools-selfie。DingJson 是 <code>IdeaProjects</code> 下的源码目录，尚无 git 仓库，故不计入这 8 个。</dd></dl>
       <dl class="note"><dt>归属</dt><dd>会话目录只能说明「在那个项目里工作过」，不等于逐行归属。treq 的 README 有作者自述作为直接证据，其余按会话密度与提交节奏推断。</dd></dl>
       <dl class="note"><dt>例外</dt><dd>TVA 驱动 pi / dsh，但本机会话库里没有它的构建记录，因此单独标注，不算作 pi/dsh 产物。</dd></dl>
       <dl class="note"><dt>时间</dt><dd>提交时间与文件时间取自 git / 文件系统；最早的 RaptorQR 提交在 2026-05，最近的在 2026-10-16。</dd></dl>
