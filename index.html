@@ -66,6 +66,28 @@
   .stat .n small{font-size:13px;color:var(--dim);margin-left:3px;letter-spacing:0}
   .stat .k{font-size:12px;color:var(--dim);margin-top:7px;letter-spacing:.06em}
 
+  /* ---------- thesis ---------- */
+  .thesis-quote{
+    font-family:var(--serif);font-size:clamp(24px,3.4vw,38px);line-height:1.5;letter-spacing:-.01em;
+    margin:0 0 46px;max-width:960px;color:var(--ink);
+  }
+  .thesis-quote em{font-style:normal;color:var(--mint);border-bottom:1px solid rgba(126,226,168,.4);padding-bottom:2px}
+  .thesis-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  .thesis-col{border-top:1px solid var(--line2);padding-top:20px}
+  .thesis-col .t-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--mint);text-transform:uppercase}
+  .thesis-col:nth-child(2) .t-k{color:var(--amber)}
+  .thesis-col h3{margin:8px 0 12px;font-size:19px;font-weight:600;letter-spacing:-.01em}
+  .thesis-col p{margin:0;color:var(--muted);font-size:13.8px;line-height:1.82}
+  .thesis-col p b{color:var(--ink);font-weight:500}
+  .thesis-col p + p{margin-top:12px}
+  .thesis-facts{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:46px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line);
+  }
+  .tf{background:var(--bg2);padding:16px 18px}
+  .tf .n{font-family:var(--mono);font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .tf .k{font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.5}
+
   /* ---------- filter ---------- */
   .filters{
     position:sticky;top:0;z-index:20;margin-top:64px;padding:14px 0;
@@ -206,6 +228,8 @@
     .grid,.tools,.pipe,.split,.notes{grid-template-columns:1fr}
     .card--wide{grid-column:span 1;grid-template-columns:1fr}
     .skills{grid-template-columns:1fr 1fr}
+    .thesis-grid{grid-template-columns:1fr;gap:26px}
+    .thesis-facts{grid-template-columns:1fr 1fr}
     .step::after{display:none}
     .note{grid-template-columns:1fr;gap:4px}
     .sec-sub{margin-left:0}
@@ -227,6 +251,12 @@
     }
     .card::after{display:none}
     .stats{background:#d8d8d8 !important}
+    .thesis-facts{background:#d8d8d8 !important}
+    .tf{background:#fff !important}
+    .thesis-quote{color:#111 !important}
+    .thesis-quote em{color:#0a6b3d !important}
+    .thesis-col .t-k{color:#0a6b3d !important}
+    .tf .k,.thesis-col p{color:#3a3a3a !important}
     .tools{background:#d8d8d8 !important;border-color:#d8d8d8 !important}
     .tagline,.card[data-cat="service"] .tagline{color:#0a6b3d !important}
     .card[data-cat="library"] .tagline{color:#4a2f8f !important}
@@ -257,7 +287,8 @@
   <p class="lede">
     过去半年，我把需求用中文说给两个跑在本机的编程助手——<b>pi</b> 和 <b>dsh</b>——
     由它们读仓库、改代码、跑测试、打包、装进 <b>/Applications</b>。
-    这里是我让它们造出来的 13 件软件与工具、一组 Agent 工具链，以及每件产物背后的构建轨迹。
+    这 13 件软件里没有一件是为「所有人」做的：每一件都只服务提出需求的那一个人，
+    也只包含我实际会用的功能。软件该是为你现场生成的，而不是让你去适应的。
   </p>
 
   <div class="stats">
@@ -277,11 +308,61 @@
     <button class="chip" data-filter="library" aria-pressed="false">库与开源 <span>1</span></button>
     <button class="chip" data-filter="device" aria-pressed="false">设备与系统 <span>5</span></button>
     <a class="chip" href="#agent">Agent 工具链 <span>19</span></a>
+    <a class="chip" href="#thesis">主旨</a>
     <a class="chip" href="#how">构建方式</a>
   </div>
 </nav>
 
 <main class="wrap">
+
+  <!-- ============ 主旨 ============ -->
+  <section id="thesis">
+    <div class="sec-head">
+      <span class="sec-num">00</span>
+      <h2 class="sec-title">主旨</h2>
+      <span class="sec-sub">为什么是现在 · 为什么是这些技术</span>
+    </div>
+    <div class="rule"></div>
+
+    <p class="thesis-quote">软件正在从「买来的标准件」，变成<em>为你一个人现场生成</em>的那一件。</p>
+
+    <div class="thesis-grid">
+      <div class="thesis-col">
+        <div class="t-k">01 · 按需生成</div>
+        <h3>不再迁就通用软件</h3>
+        <p>
+          写软件的成本一旦低于适应软件的成本，选择就反过来了。与其学一套为千万人设计的交互、
+          再忍受大半用不上的功能，不如把自己这台机器上的一天描述清楚，
+          直接拿到一个<b>只包含我要的功能</b>的版本。
+        </p>
+        <p>
+          所以这批东西大多没有产品经理、没有用户调研、也没有向下兼容的包袱——它们只有一个用户。
+          <b>pdf2str 58 行、utools-selfie 打包 9 KB</b>，这类东西不值得立项，但值得存在。
+        </p>
+      </div>
+      <div class="thesis-col">
+        <div class="t-k">02 · 新栈优先</div>
+        <h3>Rust 这类技术，账算得过来</h3>
+        <p>
+          写代码的边际成本被 AI 压下来之后，选型的约束就从「团队熟不熟悉」变成「机器跑不跑得动」。
+          Rust 的收益在这批软件上是能数出来的：<b>没有 GC 抖动、常驻内存低、单个二进制没有运行时依赖、启动即用</b>。
+        </p>
+        <p>
+          代价当然也有：IMAP、SMTP、MIME 一行一行手写下来，才有 <b>maildesk</b> 5.4 MB 的二进制和
+          3.6 万封邮件 94 MB 的常驻内存；<b>treq</b> 3.3 万行换来的同样是一个可以直接拷走的二进制。
+          小，意味着它值得一直开着——而不是用完就关。
+        </p>
+      </div>
+    </div>
+
+    <div class="thesis-facts">
+      <div class="tf"><div class="n">5.4 MB</div><div class="k">maildesk 二进制 · 手写全套邮件协议</div></div>
+      <div class="tf"><div class="n">94 MB</div><div class="k">3.6 万封邮件时的常驻内存</div></div>
+      <div class="tf"><div class="n">0.73 ms</div><div class="k">DingJson 流式读 10 万整数</div></div>
+      <div class="tf"><div class="n">9 KB</div><div class="k">utools-selfie 整个插件</div></div>
+    </div>
+  </section>
+
 
   <!-- ============ 桌面应用 ============ -->
   <section id="desktop">
