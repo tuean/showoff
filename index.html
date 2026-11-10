@@ -66,6 +66,28 @@
   .stat .n small{font-size:13px;color:var(--dim);margin-left:3px;letter-spacing:0}
   .stat .k{font-size:12px;color:var(--dim);margin-top:7px;letter-spacing:.06em}
 
+  /* ---------- thesis ---------- */
+  .thesis-quote{
+    font-family:var(--serif);font-size:clamp(24px,3.4vw,38px);line-height:1.5;letter-spacing:-.01em;
+    margin:0 0 46px;max-width:960px;color:var(--ink);
+  }
+  .thesis-quote em{font-style:normal;color:var(--mint);border-bottom:1px solid rgba(126,226,168,.4);padding-bottom:2px}
+  .thesis-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  .thesis-col{border-top:1px solid var(--line2);padding-top:20px}
+  .thesis-col .t-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--mint);text-transform:uppercase}
+  .thesis-col:nth-child(2) .t-k{color:var(--amber)}
+  .thesis-col h3{margin:8px 0 12px;font-size:19px;font-weight:600;letter-spacing:-.01em}
+  .thesis-col p{margin:0;color:var(--muted);font-size:13.8px;line-height:1.82}
+  .thesis-col p b{color:var(--ink);font-weight:500}
+  .thesis-col p + p{margin-top:12px}
+  .thesis-facts{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:46px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line);
+  }
+  .tf{background:var(--bg2);padding:16px 18px}
+  .tf .n{font-family:var(--mono);font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .tf .k{font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.5}
+
   /* ---------- filter ---------- */
   .filters{
     position:sticky;top:0;z-index:20;margin-top:64px;padding:14px 0;
@@ -105,6 +127,7 @@
   .card:hover::after{opacity:1}
   .card[data-cat="desktop"]{--glow:rgba(126,226,168,.10)}
   .card[data-cat="service"]{--glow:rgba(138,180,255,.10)}
+  .card[data-cat="library"]{--glow:rgba(195,166,255,.11)}
   .card[data-cat="device"]{--glow:rgba(240,180,41,.09)}
 
   .repo{
@@ -133,6 +156,7 @@
   .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px}
   .tagline{font-size:14.5px;color:var(--mint);margin:0 0 10px;line-height:1.6}
   .card[data-cat="service"] .tagline{color:var(--blue)}
+  .card[data-cat="library"] .tagline{color:var(--violet)}
   .card[data-cat="device"] .tagline{color:var(--amber)}
   .card p.desc{color:var(--muted);font-size:13.8px;line-height:1.78;margin:0 0 18px}
   .card p.desc b{color:var(--ink);font-weight:500}
@@ -145,6 +169,7 @@
   .meta{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--dim);line-height:1.6}
   .meta .dotline{width:5px;height:5px;border-radius:50%;background:var(--mint);margin-top:7px;flex:none;opacity:.8}
   .card[data-cat="service"] .meta .dotline{background:var(--blue)}
+  .card[data-cat="library"] .meta .dotline{background:var(--violet)}
   .card[data-cat="device"] .meta .dotline{background:var(--amber)}
   .meta a{color:var(--muted);border-bottom:1px dotted var(--line2)}
   .meta a:hover{color:var(--ink)}
@@ -203,6 +228,8 @@
     .grid,.tools,.pipe,.split,.notes{grid-template-columns:1fr}
     .card--wide{grid-column:span 1;grid-template-columns:1fr}
     .skills{grid-template-columns:1fr 1fr}
+    .thesis-grid{grid-template-columns:1fr;gap:26px}
+    .thesis-facts{grid-template-columns:1fr 1fr}
     .step::after{display:none}
     .note{grid-template-columns:1fr;gap:4px}
     .sec-sub{margin-left:0}
@@ -224,8 +251,17 @@
     }
     .card::after{display:none}
     .stats{background:#d8d8d8 !important}
+    .thesis-facts{background:#d8d8d8 !important}
+    .tf{background:#fff !important}
+    .thesis-quote{color:#111 !important}
+    .thesis-quote em{color:#0a6b3d !important}
+    .thesis-col .t-k{color:#0a6b3d !important}
+    .tf .k,.thesis-col p{color:#3a3a3a !important}
     .tools{background:#d8d8d8 !important;border-color:#d8d8d8 !important}
     .tagline,.card[data-cat="service"] .tagline{color:#0a6b3d !important}
+    .card[data-cat="library"] .tagline{color:#4a2f8f !important}
+    .card[data-cat="library"] .shot{background:#f8f6fd !important;border-color:#d8d8d8 !important}
+    .card[data-cat="library"] .shot i{background:#6b4fc4 !important}
     .card[data-cat="device"] .tagline{color:#8a5a00 !important}
     .kicker,.fact,.meta,.desc,.lede,.stat .k,.sec-sub,.sec-num,.note dt,.note dd,.skill span,.tool p,.step p{
       color:#3a3a3a !important;
@@ -235,6 +271,7 @@
     .mark{box-shadow:none !important}
     .shot{border-color:#d8d8d8 !important;box-shadow:none !important}
     .meta .dotline{background:#0a6b3d !important}
+    .card[data-cat="library"] .meta .dotline{background:#4a2f8f !important}
     .side .count,.note dd code,.tool code{color:#333 !important;background:#f1f1f1 !important}
     a{color:#1b4fb8 !important}
     b,strong{color:#0b0b0b !important}
@@ -250,30 +287,82 @@
   <p class="lede">
     过去半年，我把需求用中文说给两个跑在本机的编程助手——<b>pi</b> 和 <b>dsh</b>——
     由它们读仓库、改代码、跑测试、打包、装进 <b>/Applications</b>。
-    这里是我让它们造出来的 12 件软件与工具、一组 Agent 工具链，以及每件产物背后的构建轨迹。
+    这 17 件软件里没有一件是为「所有人」做的：每一件都只服务提出需求的那一个人，
+    也只包含我实际会用的功能。软件该是为你现场生成的，而不是让你去适应的。
   </p>
 
   <div class="stats">
-    <div class="stat"><div class="n">12</div><div class="k">件成品</div></div>
-    <div class="stat"><div class="n">15.5<small>万行</small></div><div class="k">Rust + JS/TS</div></div>
-    <div class="stat"><div class="n">258</div><div class="k">次构建会话</div></div>
+    <div class="stat"><div class="n">17</div><div class="k">件成品</div></div>
+    <div class="stat"><div class="n">18.5<small>万行</small></div><div class="k">Rust + JS/TS + Java</div></div>
+    <div class="stat"><div class="n">355</div><div class="k">次构建会话</div></div>
     <div class="stat"><div class="n">4</div><div class="k">已装进 /Applications</div></div>
-    <div class="stat"><div class="n">8</div><div class="k">GitHub 公开仓库</div></div>
+    <div class="stat"><div class="n">16</div><div class="k">GitHub 公开仓库</div></div>
   </div>
 </header>
 
 <nav class="filters" aria-label="筛选">
   <div class="wrap">
-    <button class="chip" data-filter="all" aria-pressed="true">全部 <span>12</span></button>
-    <button class="chip" data-filter="desktop" aria-pressed="false">桌面应用 <span>4</span></button>
-    <button class="chip" data-filter="service" aria-pressed="false">本地服务 <span>3</span></button>
+    <button class="chip" data-filter="all" aria-pressed="true">全部 <span>17</span></button>
+    <button class="chip" data-filter="desktop" aria-pressed="false">桌面应用 <span>6</span></button>
+    <button class="chip" data-filter="service" aria-pressed="false">本地服务 <span>5</span></button>
+    <button class="chip" data-filter="library" aria-pressed="false">库与开源 <span>1</span></button>
     <button class="chip" data-filter="device" aria-pressed="false">设备与系统 <span>5</span></button>
     <a class="chip" href="#agent">Agent 工具链 <span>19</span></a>
+    <a class="chip" href="#thesis">主旨</a>
     <a class="chip" href="#how">构建方式</a>
   </div>
 </nav>
 
 <main class="wrap">
+
+  <!-- ============ 主旨 ============ -->
+  <section id="thesis">
+    <div class="sec-head">
+      <span class="sec-num">00</span>
+      <h2 class="sec-title">主旨</h2>
+      <span class="sec-sub">为什么是现在 · 为什么是这些技术</span>
+    </div>
+    <div class="rule"></div>
+
+    <p class="thesis-quote">软件正在从「买来的标准件」，变成<em>为你一个人现场生成</em>的那一件。</p>
+
+    <div class="thesis-grid">
+      <div class="thesis-col">
+        <div class="t-k">01 · 按需生成</div>
+        <h3>不再迁就通用软件</h3>
+        <p>
+          写软件的成本一旦低于适应软件的成本，选择就反过来了。与其学一套为千万人设计的交互、
+          再忍受大半用不上的功能，不如把自己这台机器上的一天描述清楚，
+          直接拿到一个<b>只包含我要的功能</b>的版本。
+        </p>
+        <p>
+          所以这批东西大多没有产品经理、没有用户调研、也没有向下兼容的包袱——它们只有一个用户。
+          <b>pdf2str 58 行、utools-selfie 打包 9 KB</b>，这类东西不值得立项，但值得存在。
+        </p>
+      </div>
+      <div class="thesis-col">
+        <div class="t-k">02 · 新栈优先</div>
+        <h3>Rust 这类技术，账算得过来</h3>
+        <p>
+          写代码的边际成本被 AI 压下来之后，选型的约束就从「团队熟不熟悉」变成「机器跑不跑得动」。
+          Rust 的收益在这批软件上是能数出来的：<b>没有 GC 抖动、常驻内存低、单个二进制没有运行时依赖、启动即用</b>。
+        </p>
+        <p>
+          代价当然也有：IMAP、SMTP、MIME 一行一行手写下来，才有 <b>maildesk</b> 5.4 MB 的二进制和
+          3.6 万封邮件 94 MB 的常驻内存；<b>treq</b> 3.3 万行换来的同样是一个可以直接拷走的二进制。
+          小，意味着它值得一直开着——而不是用完就关。
+        </p>
+      </div>
+    </div>
+
+    <div class="thesis-facts">
+      <div class="tf"><div class="n">5.4 MB</div><div class="k">maildesk 二进制 · 手写全套邮件协议</div></div>
+      <div class="tf"><div class="n">94 MB</div><div class="k">3.6 万封邮件时的常驻内存</div></div>
+      <div class="tf"><div class="n">0.73 ms</div><div class="k">DingJson 流式读 10 万整数</div></div>
+      <div class="tf"><div class="n">9 KB</div><div class="k">utools-selfie 整个插件</div></div>
+    </div>
+  </section>
+
 
   <!-- ============ 桌面应用 ============ -->
   <section id="desktop">
@@ -348,7 +437,8 @@
         <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 项目记忆 + dsh 2 个会话</span></div>
       </article>
 
-      <article class="card" data-cat="desktop">
+      <article class="card has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/tva" target="_blank" rel="noopener">GitHub ↗</a>
         <div class="card-top">
           <img class="appicon" src="assets/tva-icon.png" alt="">
           <div><h3>TVA</h3><div class="kicker">Voice Agent · Rust + GPUI</div></div>
@@ -366,6 +456,47 @@
         </div>
         <div class="meta"><span class="dotline"></span><span>它是 pi / dsh 的前端而非产物：本机会话库里没有它的构建记录，按实际来源标注</span></div>
       </article>
+
+      <article class="card has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/tCal" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark">tc</div>
+          <div><h3>tCal</h3><div class="kicker">Calendar · Rust + GPUI</div></div>
+        </div>
+        <p class="tagline">本机日历：月视图下面压着农历、节气与节日，待办和提醒都在同一格里。</p>
+        <p class="desc">
+          月网格支持跨天拖选，一次排完一周或整月；农历来自 <code>chinese-lunisolar-calendar</code>，
+          二十四节气交给 <code>xcal</code> 天文计算而不是写死表；提醒提前一分钟经通知中心弹出，
+          没有权限、没有音效文件也只记一行日志，绝不让窗口跟着挂掉。
+        </p>
+        <div class="facts">
+          <span class="fact">2.3k 行 Rust</span>
+          <span class="fact">农历 + 24 节气</span>
+          <span class="fact">本机通知</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 1 个会话 · dist/tCal.app；仓库没有 README，代码即文档</span></div>
+      </article>
+
+      <article class="card has-repo" data-cat="desktop">
+        <a class="repo" href="https://github.com/tuean/dslocal" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark">ds</div>
+          <div><h3>dslocal</h3><div class="kicker">DeepSeek 桌面壳 · GPUI + WKWebView</div></div>
+        </div>
+        <p class="tagline">把 chat.deepseek.com 装进一个 44pt 工具栏的原生窗口，界面的每个像素都归自己。</p>
+        <p class="desc">
+          gpui 画工具栏、AppKit 装 WKWebView，两套坐标系在 44pt 处对齐；缩放 25%–300%、前进后退、整窗拖拽；
+          一键把当前对话抓成 Markdown 存盘（页内三重选择器兜底，站点改哈希类名也不至于全瞎）；
+          全局快捷键在任何焦点下生效，窗口位置、尺寸与缩放落盘重开还原。
+        </p>
+        <div class="facts">
+          <span class="fact">3.4k 行 Rust</span>
+          <span class="fact">运行时 shader</span>
+          <span class="fact">Markdown 导出</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 2 个会话 · artifacts/ 只留过程证据，不进仓库</span></div>
+      </article>
+
 
     </div>
   </section>
@@ -400,7 +531,8 @@
         <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh <b>20 个会话</b>——本机最密集的一个项目</span></div>
       </article>
 
-      <article class="card" data-cat="service">
+      <article class="card has-repo" data-cat="service">
+        <a class="repo" href="https://github.com/tuean/tblogs" target="_blank" rel="noopener">GitHub ↗</a>
         <div class="card-top">
           <div class="mark blue">tb</div>
           <div><h3>tblogs</h3><div class="kicker">Blog System · 两段式</div></div>
@@ -419,7 +551,8 @@
         <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 3 个会话 · deploy/ 含 cloudflared 与 DDNS 定时器</span></div>
       </article>
 
-      <article class="card card--wide" data-cat="service">
+      <article class="card card--wide has-repo" data-cat="service">
+        <a class="repo" href="https://github.com/tuean/gov-reports" target="_blank" rel="noopener">GitHub ↗</a>
         <div class="body">
           <div class="card-top">
             <div class="mark blue">gr</div>
@@ -450,10 +583,119 @@
     </div>
   </section>
 
+      <article class="card has-repo" data-cat="service">
+        <a class="repo" href="https://github.com/tuean/tdsearch" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark blue">td</div>
+          <div><h3>tdsearch</h3><div class="kicker">AI Search · axum + SSE</div></div>
+        </div>
+        <p class="tagline">跑在本机的搜索引擎：检索和答案都从 DeepSeek 流式回来，前端零构建。</p>
+        <p class="desc">
+          后端代理检索与生成，检索 30 秒、生成 120 秒各走各的超时；SSE 逐字下发答案，
+          进程内 TTL 缓存挡掉重复查询；key 只在 <code>.env</code> 里、只在后端进程内，
+          浏览器从头到尾拿不到。前端是一个静态页面，没有框架、没有 CDN。
+        </p>
+        <div class="facts">
+          <span class="fact">2.2k 行 Rust</span>
+          <span class="fact">SSE 流式</span>
+          <span class="fact">零构建前端</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 1 个会话 · 配好 .env 后 <code>cargo run</code> 即用</span></div>
+      </article>
+
+      <article class="card has-repo" data-cat="service">
+        <a class="repo" href="https://github.com/tuean/zhanguoce" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="card-top">
+          <div class="mark blue">zg</div>
+          <div><h3>zhanguoce · 戰國策</h3><div class="kicker">古籍研读 · Rust SSR · 17.7k 行</div></div>
+        </div>
+        <p class="tagline">《战国策》33 卷：原文、白话、注疏对读，人物、史事与谋略都从正文里标出来。</p>
+        <p class="desc">
+          手写 HTTP/1.1 循环做服务端渲染，<b>没有前端框架、没有 wasm、没有 JS</b>；
+          内存里的 CJK bigram 索引支持按卷 / 按国过滤；实体、史事、谋略一层层叠在正文上并可回跳；
+          AI 追问只走实时 API，key 不进日志、错误文本先脱敏再上页面。
+        </p>
+        <div class="facts">
+          <span class="fact">17.7k 行 Rust</span>
+          <span class="fact">33 卷 · 11 国策</span>
+          <span class="fact">零前端依赖</span>
+        </div>
+        <div class="meta"><span class="dotline"></span><span>构建轨迹：dsh 2 个会话 · 本地目录叫 <code>this</code>，仓库名改用 <code>zhanguoce</code></span></div>
+      </article>
+
+  <!-- ============ 库与开源 ============ -->
+  <section id="library">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">库与开源</h2>
+      <span class="sec-sub">Java 8+ · 零依赖 · 合规优先</span>
+    </div>
+    <div class="rule"></div>
+
+    <div class="grid">
+
+      <article class="card card--wide" data-cat="library">
+        <div class="body">
+          <div class="card-top">
+            <div class="mark violet">dj</div>
+            <div><h3>DingJson</h3><div class="kicker">JSON Library · Java 8+ · 零依赖</div></div>
+          </div>
+          <p class="tagline">一个不受 autoType 牵连、也敢拿去跑基准的 Java JSON 库：318 个合规用例全过，流式读数组比 fastjson2 还快。</p>
+          <p class="desc">
+            手写字符级解析器，<b>零运行时依赖</b>——没有第三方 jar，也没有传递 CVE。安全是默认值而不是选项：
+            深度上限 512（防嵌套 DoS）、HTML 转义（防 XSS）、字符串内裸控制字符按 RFC 8259 拒绝、NaN / Infinity 绝不输出非法字面量。
+            企业侧给齐 Jackson 同款 <code>DingJsonMapper</code>、<code>@JSONField</code> 注解、JSONPath，以及 <code>eval</code> / <code>isValid</code> / <code>deepCopy</code> 一行式 API；
+            <b>5,044 行单文件版</b>可以直接拖进任何老项目，不需要构建配置。
+          </p>
+          <div class="facts">
+            <span class="fact">5,083 行 Java</span>
+            <span class="fact">488 个测试 · 0 失败</span>
+            <span class="fact">JSONTestSuite 318/318</span>
+            <span class="fact">零依赖</span>
+          </div>
+          <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 4 个会话（4.6 MB 记录）· 未建 git 仓库，因此没有公开地址与提交数</span></div>
+        </div>
+        <div class="shot" style="background:#0b0d12;padding:26px 24px;display:flex;flex-direction:column;justify-content:center;min-height:270px">
+          <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--violet);margin-bottom:20px">100K INT ARRAY · 流式读取 ms/op</div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--violet)">DingJson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:9%;border-radius:4px;background:linear-gradient(90deg,#c3a6ff,#8f6bff)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums">0.73</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">fastjson2</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:16%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">1.32</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Jackson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:26%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">2.11</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Gson</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:35%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">2.80</span>
+          </div>
+          <div style="display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">org.json</span>
+            <span style="position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:4px;background:rgba(255,255,255,.20)"></i></span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums">8.09</span>
+          </div>
+          <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.9">
+            零装箱 · 零中间树 · 比通用 parseArray 快 2.6x<br>
+            16 个主类 · 单文件版 5,044 行 · Apache 2.0
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
   <!-- ============ 设备与系统 ============ -->
   <section id="device">
     <div class="sec-head">
-      <span class="sec-num">03</span>
+      <span class="sec-num">04</span>
       <h2 class="sec-title">设备与系统小工具</h2>
       <span class="sec-sub">贴着 macOS / 浏览器 / uTools 的边角</span>
     </div>
@@ -556,7 +798,8 @@
         <div class="meta"><span class="dotline"></span><span>构建轨迹：pi 1 个会话（约 1 MB 记录）</span></div>
       </article>
 
-      <article class="card" data-cat="device">
+      <article class="card has-repo" data-cat="device">
+        <a class="repo" href="https://github.com/tuean/pdf2str" target="_blank" rel="noopener">GitHub ↗</a>
         <div class="card-top">
           <div class="mark amber">p2</div>
           <div><h3>pdf2str</h3><div class="kicker">CLI · 58 行</div></div>
@@ -579,7 +822,7 @@
   <!-- ============ Agent 工具链 ============ -->
   <section id="agent">
     <div class="sec-head">
-      <span class="sec-num">04</span>
+      <span class="sec-num">05</span>
       <h2 class="sec-title">Agent 工具链</h2>
       <span class="sec-sub">给人和给 agent 用的那部分</span>
     </div>
@@ -614,7 +857,7 @@
   <!-- ============ 构建方式 ============ -->
   <section id="how">
     <div class="sec-head">
-      <span class="sec-num">05</span>
+      <span class="sec-num">06</span>
       <h2 class="sec-title">它们是怎么被造出来的</h2>
       <span class="sec-sub">说需求 → 验收，而不是写代码</span>
     </div>
@@ -657,26 +900,26 @@
   <!-- ============ 口径 ============ -->
   <section id="notes">
     <div class="sec-head">
-      <span class="sec-num">06</span>
+      <span class="sec-num">07</span>
       <h2 class="sec-title">口径与证据</h2>
       <span class="sec-sub">哪些是数出来的，哪些是推出来的</span>
     </div>
     <div class="rule"></div>
 
     <div class="notes">
-      <dl class="note"><dt>代码行数</dt><dd><code>src/</code> 与 <code>crates/</code> 下 <code>.rs</code> 的行数合计，不含 <code>target/</code> 与依赖；JS/TS 同理。共 154,694 行。</dd></dl>
-      <dl class="note"><dt>会话数</dt><dd>pi：<code>~/.pi/agent/sessions/&lt;工作区&gt;/*.jsonl</code> 共 190 个；dsh：<code>~/.dsh/sessions/&lt;工作区&gt;/</code> 共 68 个，合计 258。目录名即当时的工作目录。</dd></dl>
+      <dl class="note"><dt>代码行数</dt><dd><code>src/</code> 与 <code>crates/</code> 下 <code>.rs</code> 的行数合计，不含 <code>target/</code> 与依赖；JS/TS 同理。共 179,751 行（本轮新增 25,057 行：tCal、tdsearch、dslocal、zhanguoce）。DingJson 按 <code>src/main</code> 下 <code>.java</code> 计 5,083 行（测试 5,959 行另计），合计 184,834 行。</dd></dl>
+      <dl class="note"><dt>会话数</dt><dd>pi：<code>~/.pi/agent/sessions/&lt;工作区&gt;/*.jsonl</code> 共 212 个；dsh：<code>~/.dsh/sessions/&lt;工作区&gt;/</code> 共 143 个，合计 355。目录名即当时的工作目录。</dd></dl>
       <dl class="note"><dt>装机</dt><dd>以 <code>/Applications</code> 下实际存在为准：treq、maildesk、artifeeds、RaptorQR Receiver。</dd></dl>
-      <dl class="note"><dt>公开仓库</dt><dd>以 <code>git remote</code> 指向 <code>github.com/tuean</code> 为准：treq、maildesk、RaptorQR、utools-fd-search、toval、artifeeds、tbas、utools-selfie。</dd></dl>
+      <dl class="note"><dt>公开仓库</dt><dd>以 <code>git remote</code> 指向 <code>github.com/tuean</code> 为准，共 16 个：treq、maildesk、RaptorQR、utools-fd-search、toval、artifeeds、tbas、utools-selfie、tva、tblogs、gov-reports、pdf2str、tCal、tdsearch、dslocal、zhanguoce。DingJson 是 <code>IdeaProjects</code> 下的源码目录，尚无 git 仓库，不计入。</dd></dl>
       <dl class="note"><dt>归属</dt><dd>会话目录只能说明「在那个项目里工作过」，不等于逐行归属。treq 的 README 有作者自述作为直接证据，其余按会话密度与提交节奏推断。</dd></dl>
       <dl class="note"><dt>例外</dt><dd>TVA 驱动 pi / dsh，但本机会话库里没有它的构建记录，因此单独标注，不算作 pi/dsh 产物。</dd></dl>
-      <dl class="note"><dt>时间</dt><dd>提交时间与文件时间取自 git / 文件系统；最早的 RaptorQR 提交在 2026-05，最近的在 2026-10-16。</dd></dl>
+      <dl class="note"><dt>时间</dt><dd>提交时间与文件时间取自 git / 文件系统；最早的 RaptorQR 提交在 2026-05，最近的在 2026-11-10。</dd></dl>
       <dl class="note"><dt>截图</dt><dd>全部来自各仓库 <code>docs/</code>，非本次补拍；treq、TBAS 为运行实拍。</dd></dl>
     </div>
   </section>
 
   <footer>
-    <div>本页由 dsh 生成 · 2026-10 · 数据来自本机会话库与各仓库</div>
+    <div>本页由 dsh 生成 · 2026-11 · 数据来自本机会话库与各仓库</div>
     <div class="egg">彩蛋：dsh 桌面宠物「D老师」· 亲密度 484 · 396 轮</div>
   </footer>
 
