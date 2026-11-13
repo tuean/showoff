@@ -53,6 +53,11 @@
   .roman{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin:0 0 42px}
   .roman b{color:var(--mint);font-weight:400}
 
+  .claim{
+    font-family:var(--serif);font-weight:600;font-size:clamp(21px,2.7vw,27px);line-height:1.55;
+    letter-spacing:.01em;margin:0 0 24px;color:var(--ink);
+  }
+  .claim em{font-style:normal;color:var(--mint);border-bottom:1px solid rgba(126,226,168,.35);padding-bottom:2px}
   .lede{max-width:640px;color:var(--muted);font-size:17px;line-height:1.9;margin:0 0 18px}
   .lede b{color:var(--ink);font-weight:500}
   .lede:last-of-type{margin-bottom:0}
@@ -151,8 +156,10 @@
   <h1>钟啸天</h1>
   <p class="roman"><b>zhongxiaotian</b> · Shanghai</p>
 
+  <p class="claim">Java 是<em>工作</em>，Rust 是<em>生活</em>。</p>
   <p class="lede">
-    白天写 Java：业务系统的权限、数据与稳定性。晚上写 Rust：跑在自己机器上的邮件、接口、RSS、日历与语音。
+    工作里写业务系统的权限、数据与稳定性；生活里给自己造跑在本机的邮件、接口、RSS、日历与语音。
+    两种语言，两种复杂度：一种要被团队接住，一种要在编译期结账。
   </p>
   <p class="lede">
     AI 把写代码的成本压下来之后，我把方向反过来了——<b>先描述清楚自己这台机器上的一天，再让软件长成那个样子</b>。
