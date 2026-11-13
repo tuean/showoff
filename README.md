@@ -1,6 +1,6 @@
 # 本机作品汇总：用 pi 与 dsh 造出来的东西
 
-> 统计时间：2026-10 · 机器：macOS（Apple Silicon）· 配套展示页：[`index.html`](index.html)
+> 统计时间：2026-10 · 机器：macOS（Apple Silicon）· 个人页：[`index.html`](index.html) · 作品档案：[`works.html`](works.html)
 
 过去半年，我把需求用中文说给两个跑在本机的编程助手——**pi**（终端代理，支持 RPC）和 **dsh**（桌面 / Web / headless 多形态）——由它们读仓库、改代码、跑测试、打包、装进 `/Applications`。下面是产出的软件、工具与技能，以及每条产物的构建轨迹。
 
@@ -153,8 +153,8 @@
 ## 七、怎么看
 
 ```bash
-open ~/RustroverProjects/showoff/index.html      # 可视化展示页（单文件 + assets/）
-open ~/RustroverProjects/showoff/showcase.pdf    # 同一份内容的 PDF 版（13 页，A4）
+open ~/RustroverProjects/showoff/index.html      # 个人页（单文件 + assets/）
+open ~/RustroverProjects/showoff/works.html      # 作品档案（17 件，可筛选）
 open ~/RustroverProjects/showoff/poster.png      # 首屏海报
 ```
 
